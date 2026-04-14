@@ -6,8 +6,8 @@ import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 
 // Pages
-import Home from './pages/Home'; // <-- Bring in the whole Home page container
-
+import Home from './pages/Home'; 
+import Collection from './pages/Collection';
 // Placeholder for other pages
 const PlaceholderPage = ({ title }) => (
   <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
@@ -30,6 +30,8 @@ function App() {
             {/* Category Routes */}
             <Route path="/collections/men" element={<PlaceholderPage title="Men's Collection" />} />
             <Route path="/about" element={<PlaceholderPage title="Our Story" />} />
+            {/* Dynamic Product Listing Page (PLP) */}
+            <Route path="/collections/:categoryId" element={<Collection />} />
             
             {/* Fallback for 404 */}
             <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
