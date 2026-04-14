@@ -1,31 +1,43 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// Components
 import Navbar from './components/layout/Navbar';
+import Hero from './components/home/Hero';
+import Footer from './components/layout/Footer';
+
+// Placeholder for other pages
+const PlaceholderPage = ({ title }) => (
+  <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
+    <h1 style={{ textTransform: 'uppercase', letterSpacing: '0.2em' }}>{title}</h1>
+    <p>This section is currently under development.</p>
+  </div>
+);
 
 function App() {
   return (
     <Router>
-      <Navbar />
-      
-      <main className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePlaceholder />} />
-        </Routes>
-      </main>
+      <div className="App">
+        <Navbar />
+        
+        <main className="main-content">
+          <Routes>
+            {/* Home Route */}
+            <Route path="/" element={<Hero />} />
+            
+            {/* Category Routes */}
+            <Route path="/collections/men" element={<PlaceholderPage title="Men's Collection" />} />
+            <Route path="/about" element={<PlaceholderPage title="Our Story" />} />
+            
+            {/* Fallback for 404 */}
+            <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
+          </Routes>
+        </main>
+
+        <Footer />
+      </div>
     </Router>
   );
 }
-
-// Temporary Placeholder to test the background
-const HomePlaceholder = () => (
-  <div style={{ height: '200vh', padding: '50px' }}>
-    <h2 style={{ textTransform: 'uppercase', letterSpacing: '0.2em', textAlign: 'center' }}>
-      Welcome to Elavate
-    </h2>
-    <p style={{ textAlign: 'center', color: '#666' }}>
-      Scroll down to test the sticky navbar...
-    </p>
-  </div>
-);
 
 export default App;
