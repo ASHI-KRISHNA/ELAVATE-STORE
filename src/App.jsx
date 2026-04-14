@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Components
 import Navbar from './components/layout/Navbar';
-import Hero from './components/home/Hero';
 import Footer from './components/layout/Footer';
+
+// Pages
+import Home from './pages/Home'; // <-- Bring in the whole Home page container
 
 // Placeholder for other pages
 const PlaceholderPage = ({ title }) => (
@@ -22,8 +24,8 @@ function App() {
         
         <main className="main-content">
           <Routes>
-            {/* Home Route */}
-            <Route path="/" element={<Hero />} />
+            {/* Home Route - Now points to the full page! */}
+            <Route path="/" element={<Home />} />
             
             {/* Category Routes */}
             <Route path="/collections/men" element={<PlaceholderPage title="Men's Collection" />} />
