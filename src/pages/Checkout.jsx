@@ -1,17 +1,11 @@
 import React from 'react';
-import { ShoppingBag, Search, HelpCircle, Tag, ChevronDown } from 'lucide-react';
+import { Search, HelpCircle, Tag, ChevronDown } from 'lucide-react';
 
 const Checkout = () => {
   return (
     <div className="checkout-layout">
       
-      {/* LEFT COLUMN: The Form */}
       <div className="checkout-main">
-        <header className="checkout-header">
-          <a href="/" className="checkout-logo">ELAVATE</a>
-          <ShoppingBag size={24} strokeWidth={1.5} />
-        </header>
-
         <div className="express-checkout">
           <p>Express checkout</p>
           <div className="express-buttons">
@@ -22,7 +16,6 @@ const Checkout = () => {
         </div>
 
         <form className="checkout-form">
-          {/* Contact Section */}
           <section className="form-section">
             <div className="section-header-row">
               <h2>Contact</h2>
@@ -31,7 +24,6 @@ const Checkout = () => {
             <input type="email" placeholder="Email" required className="checkout-input" />
           </section>
 
-          {/* Delivery Section */}
           <section className="form-section">
             <h2>Delivery</h2>
             
@@ -79,7 +71,6 @@ const Checkout = () => {
             </div>
           </section>
 
-          {/* Shipping Method */}
           <section className="form-section">
             <h2>Shipping method</h2>
             <div className="shipping-placeholder">
@@ -87,7 +78,6 @@ const Checkout = () => {
             </div>
           </section>
 
-          {/* Payment */}
           <section className="form-section">
             <h2>Payment</h2>
             <p className="subtitle">All transactions are secure and encrypted.</p>
@@ -112,7 +102,6 @@ const Checkout = () => {
             </label>
           </section>
 
-          {/* Submit */}
           <button type="submit" className="btn-pay-now">Pay now</button>
         </form>
 
@@ -124,11 +113,9 @@ const Checkout = () => {
         </footer>
       </div>
 
-      {/* RIGHT COLUMN: Order Summary */}
       <div className="checkout-sidebar">
         <div className="sidebar-content">
           
-          {/* Product Row */}
           <div className="summary-product">
             <div className="product-image-container">
               <img src="https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922502/Organic_Cotton_Oxford_Shirt_A_wqejbq.png" alt="Jasper Shirt" />
@@ -147,13 +134,11 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Discount Code */}
           <div className="discount-section">
             <input type="text" placeholder="Discount code or gift card" className="checkout-input" />
             <button className="btn-apply">Apply</button>
           </div>
 
-          {/* Pricing Math */}
           <div className="pricing-breakdown">
             <div className="pricing-row">
               <span>Subtotal</span>
@@ -169,7 +154,6 @@ const Checkout = () => {
             </div>
           </div>
 
-          {/* Total */}
           <div className="checkout-total">
             <span>Total</span>
             <div className="total-price">

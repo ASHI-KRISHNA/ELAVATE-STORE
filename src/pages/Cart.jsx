@@ -1,10 +1,11 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Minus, Plus, X, Tag } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
+    const navigate = useNavigate();
 
     const handleImageError = (e) => {
         e.target.src = 'https://via.placeholder.com/300x400?text=Elavate';
@@ -84,7 +85,7 @@ const Cart = () => {
                         <h2>Subtotal: ${cartTotal.toFixed(2)} CAD</h2>
                         <p>Taxes, discounts and shipping calculated at checkout.</p>
                     </div>
-                    <button className="checkout-btn">CHECKOUT</button>
+                    <button className="checkout-btn" onClick={() => navigate('/checkout')}>CHECKOUT</button>
                 </div>
             </footer>
         </div>

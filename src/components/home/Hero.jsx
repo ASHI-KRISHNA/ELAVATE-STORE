@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import heroImg from '/src/assets/images/hero-banner.png';
+
 const Hero = () => {
   return (
     <section className="hero">
-      {/* The image is now a background element */}
       <div className="hero-visual">
         <img src={heroImg} alt="ELAVATE Collection" className="hero-bg-image" />
         <div className="hero-overlay"></div>
@@ -18,8 +19,8 @@ const Hero = () => {
             engineered for longevity.
           </p>
           <div className="hero-actions">
-            <button className="btn-primary">Shop Men</button>
-            <button className="btn-secondary">Our Story</button>
+            <Link to="/collections/all" className="btn-primary">Shop Men</Link>
+            <Link to="/about" className="btn-secondary">Our Story</Link>
           </div>
         </div>
       </div>

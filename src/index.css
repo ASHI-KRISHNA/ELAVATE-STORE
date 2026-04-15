@@ -2553,3 +2553,210 @@ body {
         grid-template-columns: 1fr; /* Stacks City, Prov, Zip on phones */
     }
 }
+.about-hero {
+    position: relative;
+    height: 70vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.about-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.about-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.about-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.about-hero-title {
+    position: relative;
+    z-index: 3;
+    color: var(--color-white);
+    font-size: 4.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin: 0;
+}
+
+.about-story-block {
+    padding: 120px 0;
+    background-color: var(--color-white);
+}
+
+.about-story-block:nth-child(even) {
+    background-color: var(--color-wheat);
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.story-text h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 30px;
+    line-height: 1.1;
+}
+
+.story-text p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 20px;
+}
+
+.story-images {
+    position: relative;
+    width: 100%;
+    min-height: 550px;
+}
+
+.story-images .img-back {
+    position: absolute;
+    top: 0;
+    width: 75%;
+    height: auto;
+    object-fit: cover;
+}
+
+.story-images .img-front {
+    position: absolute;
+    bottom: 0;
+    width: 60%;
+    height: auto;
+    object-fit: cover;
+    border: 12px solid var(--color-white);
+    z-index: 2;
+}
+
+.about-story-block:nth-child(even) .story-images .img-front {
+    border-color: var(--color-wheat);
+}
+
+.left-overlap .img-back {
+    right: 0;
+}
+
+.left-overlap .img-front {
+    left: 0;
+}
+
+.right-overlap .img-back {
+    left: 0;
+}
+
+.right-overlap .img-front {
+    right: 0;
+}
+
+.about-philosophy {
+    padding: 120px 0;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    text-align: center;
+}
+
+.philosophy-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.philosophy-container h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 40px;
+}
+
+.philosophy-container p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #CCC;
+    margin-bottom: 30px;
+}
+
+.about-cta {
+    position: relative;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.cta-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1550614000-4b95dd2441bb?q=80&w=2000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: brightness(0.4);
+    z-index: 1;
+}
+
+.cta-title {
+    position: relative;
+    z-index: 2;
+    color: var(--color-white);
+    font-size: 3.5rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .story-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    .story-grid.reverse .story-text {
+        order: 1;
+    }
+    .story-grid.reverse .story-images {
+        order: 2;
+    }
+    .story-images {
+        min-height: 400px;
+        width: 80%;
+        margin: 0 auto;
+    }
+    .about-hero-title {
+        font-size: 3rem;
+    }
+    .cta-title {
+        font-size: 2.5rem;
+    }
+}
