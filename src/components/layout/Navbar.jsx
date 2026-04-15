@@ -4,14 +4,13 @@ import { ShoppingBag, Search, User, Menu, ChevronDown, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
 const Navbar = () => {
-  const { cartCount, toggleCart } = useCart(); 
+  const { cartCount } = useCart(); 
   const navigate = useNavigate();
   
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [announcementIndex, setAnnouncementIndex] = useState(0);
   
-  // --- NEW: LIVE SEARCH STATE ---
   const [allProducts, setAllProducts] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const searchInputRef = useRef(null);
@@ -22,7 +21,6 @@ const Navbar = () => {
     "NEW ARRIVALS JUST LANDED"
   ];
 
-  // Rotate Announcements
   useEffect(() => {
     const interval = setInterval(() => {
       setAnnouncementIndex((prev) => (prev + 1) % announcements.length);
@@ -30,14 +28,12 @@ const Navbar = () => {
     return () => clearInterval(interval);
   }, [announcements.length]);
 
-  // Auto-focus input when opened
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       setTimeout(() => searchInputRef.current.focus(), 100);
     }
   }, [isSearchOpen]);
 
-  // --- NEW: FETCH ALL PRODUCTS ONCE ---
   useEffect(() => {
     fetch('https://api.npoint.io/97e4992f49ffa25befab')
       .then(res => res.json())
@@ -45,7 +41,6 @@ const Navbar = () => {
       .catch(err => console.error("Search fetch error:", err));
   }, []);
 
-  // --- NEW: LIVE FILTER ENGINE ---
   useEffect(() => {
     if (searchQuery.trim().length > 0) {
       const filtered = allProducts.filter(product => 
@@ -67,14 +62,12 @@ const Navbar = () => {
     }
   };
 
-  // Helper to safely get the first image
   const getImageUrl = (imageProp) => {
     return Array.isArray(imageProp) ? imageProp[0] : (imageProp || 'https://placehold.co/400x500/E8E6E1/1A1A1A?text=No+Image');
   };
 
   return (
     <>
-      {/* THE MEGA SEARCH OVERLAY */}
       <div className={`search-mega-overlay ${isSearchOpen ? 'open' : ''}`}>
         <div className="search-mega-container">
           
@@ -97,7 +90,7 @@ const Navbar = () => {
           <div className="search-close-wrapper">
             <button onClick={() => {
                 setIsSearchOpen(false);
-                setSearchQuery(""); // Clear on close
+                setSearchQuery(""); 
             }} className="search-mega-close">
               <X size={28} strokeWidth={1} />
             </button>
@@ -105,7 +98,6 @@ const Navbar = () => {
           
         </div>
 
-        {/* --- NEW: LIVE RESULTS AREA --- */}
         <div className="search-mega-results">
           {searchQuery.trim().length === 0 ? (
             <p className="search-empty-text">Type to start searching...</p>
@@ -113,19 +105,22 @@ const Navbar = () => {
             <p className="search-empty-text">Sorry, we couldn't find any results for "{searchQuery}"</p>
           ) : (
             <div className="search-results-grid">
-              {/* Only show top 4 results to keep it looking clean */}
               {searchResults.slice(0, 4).map((product) => (
                 <Link 
                   to={`/product/${product.id}`} 
                   key={product.id} 
                   className="search-result-card"
-                  onClick={() => setIsSearchOpen(false)} // Close overlay on click
+                  onClick={() => setIsSearchOpen(false)}
                 >
                   <div className="src-img-wrapper">
-                    <img src={getImageUrl(product.image)} alt={product.name} />
+                    <img 
+                      src={getImageUrl(product.image)} 
+                      alt={product.name} 
+                      onError={(e) => e.target.src = 'https://placehold.co/400x500/E8E6E1/1A1A1A?text=No+Image'}
+                    />
                   </div>
                   <div className="src-info">
-                    <h4>{product.name}</h4>
+                    <h4>{product.name.toUpperCase()}</h4>
                     <p>${product.price}.00 CAD</p>
                   </div>
                 </Link>
@@ -179,16 +174,16 @@ const Navbar = () => {
                   onClick={() => setIsSearchOpen(true)} 
                 />
 
-                <Link to="/login" style={{ color: 'inherit', display: 'flex', alignItems: 'center' }}>
+                <Link to="/profile" className="nav-icon-link">
                   <User size={20} strokeWidth={1.5} className="nav-icon" />
                 </Link>
 
-                <div className="cart-container" onClick={toggleCart} style={{ cursor: 'pointer' }}>
+                <Link to="/cart" className="cart-container">
                   <ShoppingBag size={20} strokeWidth={1.5} className="nav-icon" />
                   {cartCount > 0 && (
                     <span className="cart-badge">{cartCount}</span>
                   )}
-                </div>
+                </Link>
 
               </div>
             </div>

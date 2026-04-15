@@ -10,7 +10,7 @@ import Footer from './components/layout/Footer';
 
 // Pages
 import Home from './pages/Home';
-
+import Cart from './pages/Cart';
 import Collection from './pages/Collection';
 import Product from './pages/Product';
 
@@ -42,6 +42,7 @@ function App() {
               {/* Dynamic Product Listing Page (PLP) */}
               <Route path="/collections/:categoryId" element={<Collection />} />
               <Route path="/product/:productId" element={<Product />} />
+              <Route path="/cart" element={<Cart />} />
               
               {/* Static Pages & Fallbacks */}
               <Route path="/about" element={<PlaceholderPage title="Our Story" />} />
