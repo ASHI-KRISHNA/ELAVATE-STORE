@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart';
 import Collection from './pages/Collection';
 import Product from './pages/Product';
+import About from './pages/About';
 
 // Placeholder for other pages
 const PlaceholderPage = ({ title }) => (
@@ -46,6 +47,7 @@ function App() {
               
               {/* Static Pages & Fallbacks */}
               <Route path="/about" element={<PlaceholderPage title="Our Story" />} />
+              <Route path="/about" element={<><Navbar /><main className="main-content"><About /></main><Footer /></>} />
               <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
             </Routes>
           </main>
