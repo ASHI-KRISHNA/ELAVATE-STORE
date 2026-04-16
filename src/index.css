@@ -2573,3 +2573,79 @@ a {
         max-width: 100%;
     }
 }
+/* =========================================
+   9. STATIC PAGES (SHIPPING, FAQ, ETC)
+========================================= */
+.shipping-page {
+    background-color: var(--color-white);
+    min-height: 80vh;
+    padding-bottom: 100px;
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 0 40px;
+}
+
+.faq-page-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 40px;
+    letter-spacing: -0.02em;
+}
+
+.faq-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    background: transparent;
+    border: none;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--color-black);
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.faq-question:hover {
+    opacity: 0.7;
+}
+
+/* --- The CSS Grid Animation Hack --- */
+.faq-answer-wrapper {
+    display: grid;
+    grid-template-rows: 0fr; /* Starts collapsed */
+    transition: grid-template-rows 0.3s ease-out;
+}
+
+.faq-answer-wrapper.open {
+    grid-template-rows: 1fr; /* Expands to natural height */
+}
+
+.faq-answer {
+    overflow: hidden; /* Crucial for the grid hack to work */
+    color: #555;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+/* Adds the padding only when open so it doesn't cause extra spacing when closed */
+.faq-answer-wrapper.open .faq-answer {
+    padding-bottom: 24px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .faq-container { margin: 40px auto; padding: 0 20px; }
+    .faq-page-title { font-size: 1.5rem; }
+    .faq-question { font-size: 0.85rem; padding: 20px 0; }
+}

@@ -15,6 +15,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import SizeGuide from "./pages/SizeGuide";
 import Contact from "./pages/Contact";
+import Shipping from './pages/Shipping'; 
 
 const PlaceholderPage = ({ title }) => (
   <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
@@ -42,6 +43,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/size-guide" element={<SizeGuide />} />
+                <Route path="/shipping" element={<Shipping />} /> 
                 <Route path="/contact" element={<Contact />} />
                 <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
               </Routes>

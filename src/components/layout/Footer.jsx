@@ -25,9 +25,9 @@ const Footer = () => {
         <div className="footer-column">
           <h3>Shop</h3>
           <ul>
-            <li><a href="/collections/men">Men's Collection</a></li>
-            <li><a href="/collections/new">New Arrivals</a></li>
-            <li><a href="/collections/essentials">Essentials</a></li>
+            <li><a href="/collections/all">Men's Collection</a></li>
+            <li><a href="/collections/all">New Arrivals</a></li>
+            <li><a href="/collections/accessories">Accessories</a></li>
           </ul>
         </div>
 
@@ -35,7 +35,8 @@ const Footer = () => {
         <div className="footer-column">
           <h3>Support</h3>
           <ul>
-            <li><a href="/shipping">Shipping & Returns</a></li>
+            <li><a href="/shipping">Shipping</a></li>
+            <li><a href="/returns">Returns</a></li>
             <li><a href="/size-guide">Size Guide</a></li>
             <li><a href="/contact">Contact Us</a></li>
           </ul>
