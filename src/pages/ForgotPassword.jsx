@@ -2,9 +2,11 @@ import React from 'react';
 import PromoMarquee from '../components/home/PromoMarquee';
 
 /**
- * ForgotPassword Component
- * Provides a user interface for requesting a password reset link 
- * via a registered email address.
+ * Renders the password reset request page.
+ * Provides a form for users to submit their email address to receive 
+ * a password recovery link, along with navigation back to the login view.
+ *
+ * @returns {JSX.Element} The ForgotPassword component.
  */
 const ForgotPassword = () => {
   return (
@@ -16,13 +18,11 @@ const ForgotPassword = () => {
         <p className="reset-subtitle">We will send you an email to reset your password.</p>
 
         <form className="reset-form">
-          {/* Email capture for identity verification */}
           <div className="form-group">
             <label htmlFor="reset-email">Email</label>
             <input type="email" id="reset-email" name="email" required />
           </div>
 
-          {/* Form submission and navigation back to authentication entry */}
           <div className="reset-actions">
             <button type="submit" className="btn-primary reset-btn">
               SUBMIT

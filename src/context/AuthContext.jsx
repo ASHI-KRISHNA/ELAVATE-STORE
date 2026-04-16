@@ -4,8 +4,21 @@ import { auth, googleProvider } from '../firebase';
 
 const AuthContext = createContext();
 
+/**
+ * Custom hook to consume the AuthContext.
+ * @returns {Object} The current user state and authentication methods.
+ */
 export const useAuth = () => useContext(AuthContext);
 
+/**
+ * Provides authentication state and methods to the application tree.
+ * Handles local email/password registration and login via localStorage, 
+ * as well as OAuth integration using Firebase Google Sign-In.
+ *
+ * @param {Object} props - Component properties.
+ * @param {React.ReactNode} props.children - Child components requiring auth context.
+ * @returns {JSX.Element} The AuthProvider component.
+ */
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -14,6 +27,9 @@ export const AuthProvider = ({ children }) => {
     if (loggedInUser) setCurrentUser(JSON.parse(loggedInUser));
   }, []);
 
+  /**
+   * Registers a new user and saves to localStorage.
+   */
   const register = (firstName, lastName, email, password) => {
     const users = JSON.parse(localStorage.getItem('elavate_users') || '[]');
     
@@ -29,6 +45,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('elavate_current_user', JSON.stringify(newUser));
   };
 
+  /**
+   * Authenticates an existing user against localStorage records.
+   */
   const login = (email, password) => {
     const users = JSON.parse(localStorage.getItem('elavate_users') || '[]');
     const user = users.find(u => u.email === email && u.password === password);
@@ -41,6 +60,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('elavate_current_user', JSON.stringify(user));
   };
 
+  /**
+   * Initiates Google OAuth flow using Firebase.
+   */
   const loginWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -60,6 +82,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Clears current user session from state and localStorage.
+   */
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem('elavate_current_user');

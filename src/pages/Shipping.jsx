@@ -28,11 +28,18 @@ const faqs = [
   }
 ];
 
+/**
+ * Renders the Shipping and FAQ page.
+ * Manages an accordion-style list where only one item remains open at a time.
+ * Utilizes a CSS Grid transition strategy for smooth height animations and 
+ * handles multi-line text formatting from the data source.
+ *
+ * @returns {JSX.Element} The Shipping page component.
+ */
 const Shipping = () => {
-  const [openIndex, setOpenIndex] = useState(0); // Opens the first one by default!
+  const [openIndex, setOpenIndex] = useState(0);
 
   const toggleFAQ = (index) => {
-    // If clicking the one that is already open, close it. Otherwise, open the new one.
     setOpenIndex(openIndex === index ? null : index);
   };
 
@@ -51,13 +58,15 @@ const Shipping = () => {
                   onClick={() => toggleFAQ(index)}
                 >
                   {faq.question}
-                  {openIndex === index ? <Minus size={18} strokeWidth={1.5} /> : <Plus size={18} strokeWidth={1.5} />}
+                  {openIndex === index ? (
+                    <Minus size={18} strokeWidth={1.5} />
+                  ) : (
+                    <Plus size={18} strokeWidth={1.5} />
+                  )}
                 </button>
                 
-                {/* CSS Grid hack for smooth height animation */}
                 <div className={`faq-answer-wrapper ${openIndex === index ? 'open' : ''}`}>
                   <div className="faq-answer">
-                    {/* Maps over the \n in our text to create actual line breaks */}
                     {faq.answer.split('\n').map((line, i) => (
                       <React.Fragment key={i}>
                         {line}

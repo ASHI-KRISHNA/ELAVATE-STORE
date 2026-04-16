@@ -3,6 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GoogleIcon } from '../assets/icons/BrandIcons';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Renders the user authentication login page.
+ * Integrates with AuthContext to support local email/password login 
+ * as well as Google OAuth, managing inline error states and post-login routing.
+ *
+ * @returns {JSX.Element} The Login component.
+ */
 const Login = () => {
   const navigate = useNavigate();
   const { login, loginWithGoogle } = useAuth();
@@ -17,7 +24,6 @@ const Login = () => {
 
     try {
       await login(email, password);
-      // Tiny delay ensures AuthContext updates currentUser before we move
       setTimeout(() => {
         navigate('/'); 
       }, 100);
@@ -30,7 +36,6 @@ const Login = () => {
     setError('');
     try {
       await loginWithGoogle();
-      // Added missing navigation for Google Sign-in
       setTimeout(() => {
         navigate('/');
       }, 100);

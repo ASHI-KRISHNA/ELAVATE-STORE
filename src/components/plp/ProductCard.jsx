@@ -1,6 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Renders an individual product card for product list pages and carousels.
+ * Features a CSS-driven image swap on hover using primary and secondary images, 
+ * and links directly to the product detail page.
+ *
+ * @param {Object} props - Component properties.
+ * @param {Object} props.product - The product data object.
+ * @param {string|number} props.product.id - The unique identifier for the product.
+ * @param {string} props.product.name - The display name of the product.
+ * @param {number} props.product.price - The price of the product.
+ * @param {string[]} props.product.image - Array of image URLs for the product.
+ * @returns {JSX.Element} The ProductCard component.
+ */
 const ProductCard = ({ product }) => {
   const primaryImage = product.image[0];
   const secondaryImage = product.image[1] || primaryImage;
@@ -28,10 +41,7 @@ const ProductCard = ({ product }) => {
       </div>
       
       <div className="editorial-info">
-        <div className="swatch-container">
-          <div className="swatch active-swatch"></div>
-        </div>
-        
+       
         <h3 className="editorial-title">{product.name}</h3>
         
         <p className="editorial-price">

@@ -1,5 +1,11 @@
 import React from 'react';
 
+/**
+ * Renders the global footer component containing brand information, 
+ * navigation links, support resources, and a newsletter subscription form.
+ *
+ * @returns {JSX.Element} The Footer component.
+ */
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -7,7 +13,6 @@ const Footer = () => {
     <footer className="footer">
       <div className="container footer-content">
         
-        {/* Column 1: Brand & Socials */}
         <div className="footer-column">
           <h2 className="footer-logo">ELAVATE</h2>
           <p className="brand-mission">
@@ -21,7 +26,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Column 2: Shop Links */}
         <div className="footer-column">
           <h3>Shop</h3>
           <ul>
@@ -31,18 +35,15 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Column 3: Support */}
         <div className="footer-column">
           <h3>Support</h3>
           <ul>
-            <li><a href="/shipping">Shipping</a></li>
-            <li><a href="/returns">Returns</a></li>
+            <li><a href="/shipping">Shipping & Returns</a></li>
             <li><a href="/size-guide">Size Guide</a></li>
             <li><a href="/contact">Contact Us</a></li>
           </ul>
         </div>
 
-        {/* Column 4: Newsletter */}
         <div className="footer-column">
           <h3>Join the Club</h3>
           <p style={{ color: '#999', fontSize: '0.85rem', marginBottom: '15px' }}>

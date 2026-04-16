@@ -2,6 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import heroImg from '/src/assets/images/hero-banner.png';
 
+/**
+ * Renders the primary hero section for the landing page.
+ * Displays a full-width background image with a dark overlay and call-to-action links.
+ *
+ * @returns {JSX.Element} The Hero component.
+ */
 const Hero = () => {
   return (
     <section className="hero">

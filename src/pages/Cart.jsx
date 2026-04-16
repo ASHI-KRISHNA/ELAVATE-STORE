@@ -1,8 +1,16 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { Minus, Plus, X, Tag } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
+/**
+ * Renders the main shopping cart page.
+ * Displays a list of selected products with their variants (size),
+ * provides controls for quantity adjustments and item removal, 
+ * and shows the base order subtotal.
+ *
+ * @returns {JSX.Element} The Cart page component.
+ */
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, cartTotal } = useCart();
     const navigate = useNavigate();
@@ -76,14 +84,10 @@ const Cart = () => {
 
             <footer className="cart-summary">
                 <div className="cart-total-section">
-                    <div className="promo-applied">
-                        <Tag size={16} />
-                        <span>ELAVATE20</span>
-                        <span className="discount-amt">-$20.00</span>
-                    </div>
                     <div className="grand-subtotal">
+                        {/* Logic update: Displaying raw cartTotal without deductions */}
                         <h2>Subtotal: ${cartTotal.toFixed(2)} CAD</h2>
-                        <p>Taxes, discounts and shipping calculated at checkout.</p>
+                        <p>Taxes and shipping calculated at checkout.</p>
                     </div>
                     <button className="checkout-btn" onClick={() => navigate('/checkout')}>CHECKOUT</button>
                 </div>

@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Renders the user registration page.
+ * Provides a controlled form for capturing user details and integrates 
+ * with AuthContext to create a new user profile. Handles inline error 
+ * states for existing accounts and manages post-registration routing.
+ *
+ * @returns {JSX.Element} The Register component.
+ */
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
 
-  // Local State for the form inputs
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,13 +28,13 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(''); // Clear old errors
+    setError('');
 
     try {
       register(formData.firstName, formData.lastName, formData.email, formData.password);
-      navigate('/'); // If successful, route them to the home page!
+      navigate('/'); 
     } catch (err) {
-      setError(err.message); // Show the error if email already exists
+      setError(err.message); 
     }
   };
 
@@ -37,8 +44,11 @@ const Register = () => {
       
       <form className="register-form" onSubmit={handleSubmit}>
         
-        {/* Error Display */}
-        {error && <div style={{ color: '#D93025', fontSize: '0.85rem', marginBottom: '10px', textAlign: 'center', fontWeight: '600' }}>{error}</div>}
+        {error && (
+          <div style={{ color: '#D93025', fontSize: '0.85rem', marginBottom: '10px', textAlign: 'center', fontWeight: '600' }}>
+            {error}
+          </div>
+        )}
 
         <div className="name-row">
           <div className="form-group">

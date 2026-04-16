@@ -3,6 +3,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingBag, Search, User, Menu, ChevronDown, X } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
+/**
+ * Renders the global navigation bar, including a rotating announcement banner,
+ * main navigation links, user action icons, and an interactive mega-search overlay.
+ * Retrieves and displays the current cart item count via CartContext.
+ *
+ * @returns {JSX.Element} The Navbar component.
+ */
 const Navbar = () => {
   const { cartCount } = useCart(); 
   const navigate = useNavigate();

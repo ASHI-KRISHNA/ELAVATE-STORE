@@ -1,10 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, HelpCircle, Tag, ChevronDown } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
+/**
+ * Renders the checkout page layout with functional form handling, 
+ * dynamic cart integration, and 20% discount logic.
+ *
+ * @returns {JSX.Element} The functional Checkout component.
+ */
 const Checkout = () => {
+  const { cartItems, cartTotal } = useCart();
+  const navigate = useNavigate();
+
+  // 1. Controlled Form State
+  const [formData, setFormData] = useState({
+    email: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    province: 'ON'
+  });
+
+  // 2. Coupon & Discount State
+  const [couponInput, setCouponInput] = useState('');
+  const [isDiscountApplied, setIsDiscountApplied] = useState(false);
+
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate('/cart');
+    }
+  }, [cartItems, navigate]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleApplyCoupon = () => {
+    if (couponInput.trim().toUpperCase() === 'BACK20') {
+      setIsDiscountApplied(true);
+      setCouponInput('');
+    } else {
+      alert("Invalid coupon code. Try 'BACK20'");
+    }
+  };
+
+  // 3. Dynamic Price Calculations
+  const discountAmount = isDiscountApplied ? cartTotal * 0.20 : 0;
+  const finalTotal = cartTotal - discountAmount;
+
+  const handlePayNow = (e) => {
+    e.preventDefault();
+    console.log("Processing order for:", formData, "Total:", finalTotal);
+    alert("Thank you for your order!");
+  };
+
   return (
     <div className="checkout-layout">
-      
       <div className="checkout-main">
         <div className="express-checkout">
           <p>Express checkout</p>
@@ -15,142 +70,100 @@ const Checkout = () => {
           <div className="divider"><span>OR</span></div>
         </div>
 
-        <form className="checkout-form">
+        <form className="checkout-form" onSubmit={handlePayNow}>
           <section className="form-section">
             <div className="section-header-row">
               <h2>Contact</h2>
-              <a href="/login" className="sign-in-link">Sign in</a>
+              <button type="button" onClick={() => navigate('/login')} className="sign-in-link">Sign in</button>
             </div>
-            <input type="email" placeholder="Email" required className="checkout-input" />
+            <input 
+              name="email"
+              type="email" 
+              placeholder="Email" 
+              required 
+              className="checkout-input" 
+              value={formData.email}
+              onChange={handleInputChange}
+            />
           </section>
 
           <section className="form-section">
             <h2>Delivery</h2>
-            
-            <div className="input-group">
-              <div className="select-wrapper">
-                <select className="checkout-input" defaultValue="Canada">
-                  <option value="Canada">Canada</option>
-                  <option value="US">United States</option>
-                </select>
-                <ChevronDown className="select-icon" size={16} />
-              </div>
-            </div>
-
             <div className="input-row">
-              <input type="text" placeholder="First name" className="checkout-input half" />
-              <input type="text" placeholder="Last name" className="checkout-input half" />
+              <input name="firstName" type="text" placeholder="First name" className="checkout-input half" onChange={handleInputChange} required />
+              <input name="lastName" type="text" placeholder="Last name" className="checkout-input half" onChange={handleInputChange} required />
             </div>
-
-            <input type="text" placeholder="Company (optional)" className="checkout-input" />
 
             <div className="input-icon-wrapper">
-              <input type="text" placeholder="Address" className="checkout-input" />
+              <input name="address" type="text" placeholder="Address" className="checkout-input" onChange={handleInputChange} required />
               <Search className="input-icon" size={18} />
             </div>
 
-            <input type="text" placeholder="Apartment, suite, etc. (optional)" className="checkout-input" />
-
             <div className="input-row three-col">
-              <input type="text" placeholder="City" className="checkout-input" />
+              <input name="city" type="text" placeholder="City" className="checkout-input" onChange={handleInputChange} required />
               <div className="select-wrapper">
-                <select className="checkout-input" defaultValue="Province">
-                  <option disabled>Province</option>
+                <select name="province" className="checkout-input" value={formData.province} onChange={handleInputChange}>
                   <option value="ON">Ontario</option>
                   <option value="QC">Quebec</option>
                   <option value="BC">British Columbia</option>
                 </select>
                 <ChevronDown className="select-icon" size={16} />
               </div>
-              <input type="text" placeholder="Postal code" className="checkout-input" />
+              <input name="postalCode" type="text" placeholder="Postal code" className="checkout-input" onChange={handleInputChange} required />
             </div>
-
-            <div className="input-icon-wrapper">
-              <input type="tel" placeholder="Phone" className="checkout-input" />
-              <HelpCircle className="input-icon text-muted" size={18} />
-            </div>
-          </section>
-
-          <section className="form-section">
-            <h2>Shipping method</h2>
-            <div className="shipping-placeholder">
-              Enter your shipping address to view available shipping methods.
-            </div>
-          </section>
-
-          <section className="form-section">
-            <h2>Payment</h2>
-            <p className="subtitle">All transactions are secure and encrypted.</p>
-            
-            <div className="payment-box">
-              <div className="payment-header">
-                <span>Credit card</span>
-              </div>
-              <div className="payment-body">
-                <input type="text" placeholder="Card number" className="checkout-input" />
-                <div className="input-row">
-                  <input type="text" placeholder="Expiration date (MM / YY)" className="checkout-input half" />
-                  <input type="text" placeholder="Security code" className="checkout-input half" />
-                </div>
-                <input type="text" placeholder="Name on card" className="checkout-input" />
-              </div>
-            </div>
-
-            <label className="checkbox-label">
-              <input type="checkbox" defaultChecked />
-              <span>Use shipping address as billing address</span>
-            </label>
           </section>
 
           <button type="submit" className="btn-pay-now">Pay now</button>
         </form>
-
-        <footer className="checkout-footer">
-          <a href="#">Refund policy</a>
-          <a href="#">Shipping</a>
-          <a href="#">Privacy policy</a>
-          <a href="#">Terms of service</a>
-        </footer>
       </div>
 
       <div className="checkout-sidebar">
         <div className="sidebar-content">
-          
-          <div className="summary-product">
-            <div className="product-image-container">
-              <img src="https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922502/Organic_Cotton_Oxford_Shirt_A_wqejbq.png" alt="Jasper Shirt" />
-              <span className="item-quantity">1</span>
-            </div>
-            <div className="product-details">
-              <h3>JASPER SHIRT - LONG SLEEVE</h3>
-              <p className="size">M</p>
-              <div className="discount-tag">
-                <Tag size={12} /> BACK20 (-$15.00)
+          {cartItems.map((item) => (
+            <div key={`${item.id}-${item.selectedSize}`} className="summary-product">
+              <div className="product-image-container">
+                <img src={Array.isArray(item.image) ? item.image[0] : item.image} alt={item.name} />
+                <span className="item-quantity">{item.quantity}</span>
+              </div>
+              <div className="product-details">
+                <h3>{item.name.toUpperCase()}</h3>
+                <p className="size">{item.selectedSize}</p>
+              </div>
+              <div className="product-pricing">
+                <span className="final-price">${(item.price * item.quantity).toFixed(2)}</span>
               </div>
             </div>
-            <div className="product-pricing">
-              <span className="original-price">$75.00</span>
-              <span className="final-price">$60.00</span>
-            </div>
+          ))}
+
+          {/* 4. Functional Coupon Input in Sidebar */}
+          <div className="discount-section" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <input 
+              type="text" 
+              placeholder="Discount code" 
+              className="checkout-input" 
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value)}
+              style={{ flex: 1 }}
+            />
+            <button type="button" onClick={handleApplyCoupon} className="btn-apply">Apply</button>
           </div>
 
-          <div className="discount-section">
-            <input type="text" placeholder="Discount code or gift card" className="checkout-input" />
-            <button className="btn-apply">Apply</button>
-          </div>
-
-          <div className="pricing-breakdown">
+          <div className="pricing-breakdown" style={{ marginTop: '20px' }}>
             <div className="pricing-row">
               <span>Subtotal</span>
-              <span>$60.00</span>
+              <span>${cartTotal.toFixed(2)}</span>
             </div>
+            
+            {isDiscountApplied && (
+              <div className="pricing-row" style={{ color: '#D93025' }}>
+                <span className="flex-align"><Tag size={14} style={{ marginRight: '5px' }}/> BACK20</span>
+                <span>-${discountAmount.toFixed(2)}</span>
+              </div>
+            )}
+
             <div className="pricing-row">
               <span>Shipping</span>
-              <span className="placeholder-dash">--</span>
-            </div>
-            <div className="pricing-row">
-              <span className="flex-align">Estimated taxes <HelpCircle size={14} className="text-muted" /></span>
-              <span className="placeholder-dash">--</span>
+              <span>FREE</span>
             </div>
           </div>
 
@@ -158,17 +171,17 @@ const Checkout = () => {
             <span>Total</span>
             <div className="total-price">
               <span className="currency">CAD</span>
-              <strong>$63.00</strong>
+              <strong>${finalTotal.toFixed(2)}</strong>
             </div>
           </div>
-          
-          <div className="total-savings">
-            <Tag size={14} /> TOTAL SAVINGS $15.00
-          </div>
 
+          {isDiscountApplied && (
+            <div className="total-savings" style={{ marginTop: '10px', fontSize: '0.85rem', color: '#666' }}>
+                <Tag size={14} /> TOTAL SAVINGS ${discountAmount.toFixed(2)}
+            </div>
+          )}
         </div>
       </div>
-
     </div>
   );
 };

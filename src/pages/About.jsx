@@ -1,11 +1,17 @@
 import React from 'react';
 import CategoryHighlights from '../components/home/CategoryHighlights';
 
+/**
+ * Renders the About page, detailing the brand's story, evolution, 
+ * and core philosophy through a mix of narrative text and overlapping imagery.
+ * Includes the CategoryHighlights component for quick navigation to collections.
+ *
+ * @returns {JSX.Element} The About page component.
+ */
 const About = () => {
   return (
     <div className="about-page">
       
-      {/* 1. HERO SECTION */}
       <section className="about-hero">
         <div className="about-hero-bg">
           <img 
@@ -17,7 +23,6 @@ const About = () => {
         <h1 className="about-hero-title">The New Standard</h1>
       </section>
 
-      {/* 2. STORY BLOCK 1: Left Images, Right Text */}
       <section className="about-story-block">
         <div className="container story-grid">
           <div className="story-images left-overlap">
@@ -38,7 +43,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* 3. STORY BLOCK 2: Left Text, Right Images (Reversed) */}
       <section className="about-story-block">
         <div className="container story-grid reverse">
           <div className="story-text">
@@ -59,7 +63,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* 4. PHILOSOPHY SECTION */}
       <section className="about-philosophy">
         <div className="container philosophy-container">
           <h2>Our Philosophy</h2>
@@ -68,10 +71,8 @@ const About = () => {
         </div>
       </section>
 
-      {/* 5. REUSABLE COMPONENT: Categories */}
       <CategoryHighlights />
 
-      {/* 6. ESSENTIALS CTA */}
       <section className="about-cta">
         <div className="cta-bg"></div>
         <h2 className="cta-title">The Essentials, Elevated.</h2>

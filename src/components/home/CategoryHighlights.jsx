@@ -1,13 +1,12 @@
 import React from 'react';
 
 /**
- * CategoryHighlights Component
- * Displays a grid of visual links to specific product collections.
+ * Renders a grid of visual navigation links highlighting core product categories.
+ * Maps static configuration data to clickable image blocks.
+ *
+ * @returns {JSX.Element} The CategoryHighlights component.
  */
 const CategoryHighlights = () => {
-  
-  // --- Data Configuration ---
-  // Array of category objects matching the store's API structure
   const categories = [
     { 
       name: 'Shirts', 
@@ -31,31 +30,25 @@ const CategoryHighlights = () => {
     <section className="category-highlights">
       <div className="container">
         
-        {/* Section Title */}
         <h2 className="section-heading">Rediscover your favourites</h2>
         
-        {/* Grid Container for Category Blocks */}
         <div className="category-blocks">
-          
-          {/* Iterating through categories to generate clickable blocks */}
           {categories.map((cat, index) => (
             <a 
               href={`/collections/${cat.name.toLowerCase()}`} 
               key={index} 
               className="category-block"
             >
-              {/* Image Container: Often used for hover zoom effects in CSS */}
               <div className="category-image-wrapper">
                 <img src={cat.image} alt={cat.name} />
               </div>
               
-              {/* Category Label */}
               <span className="category-name">{cat.name}</span>
             </a>
           ))}
-          
-        </div> {/* End .category-blocks */}
-      </div> {/* End .container */}
+        </div> 
+
+      </div>
     </section>
   );
 };

@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
-
+/**
+ * Renders the Client Services / Contact page.
+ * Features a controlled form with simulated submission handling 
+ * and a side panel displaying direct contact information and studio location.
+ *
+ * @returns {JSX.Element} The Contact page component.
+ */
 const Contact = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -23,13 +29,11 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate an API call to send the email
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
       setFormData({ firstName: '', lastName: '', email: '', subject: '', message: '' });
       
-      // Optional: reset success message after a few seconds
       setTimeout(() => setIsSubmitted(false), 5000);
     }, 1200);
   };
@@ -47,7 +51,6 @@ const Contact = () => {
 
         <div className="contact-layout">
           
-          {/* LEFT COLUMN: THE FORM */}
           <div className="contact-form-wrapper">
             {isSubmitted ? (
               <div className="contact-success-message">
@@ -134,7 +137,6 @@ const Contact = () => {
             </form>
           </div>
 
-          {/* RIGHT COLUMN: CONTACT INFO */}
           <div className="contact-info-wrapper">
             <div className="info-block">
               <Mail className="info-icon" size={20} strokeWidth={1.5} />

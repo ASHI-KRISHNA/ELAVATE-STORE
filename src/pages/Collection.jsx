@@ -4,37 +4,45 @@ import { SlidersHorizontal, ChevronDown } from 'lucide-react';
 import PromoMarquee from '../components/home/PromoMarquee';
 import ProductCard from '../components/plp/ProductCard';
 
+/**
+ * Renders the Product Listing Page (PLP) for various collections.
+ * Handles dynamic data fetching, client-side filtering, sorting, 
+ * and collapsible filter sub-sections.
+ *
+ * @returns {JSX.Element} The Collection page component.
+ */
 const Collection = () => {
   const { categoryId = "jackets" } = useParams();
   const navigate = useNavigate();
   
-  // --- 1. CORE DATA STATE ---
+  // Data State
   const [products, setProducts] = useState([]);
   const [allCategories, setAllCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // --- 2. UI TOGGLE STATE ---
+  // UI Toggle State
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [expandedFilters, setExpandedFilters] = useState({
+    price: true,
+    size: true
+  });
 
-  // --- 3. FILTER & SORT STATE ---
+  // Filter & Sort State
   const [showOutOfStock, setShowOutOfStock] = useState(true);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(275);
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [sortBy, setSortBy] = useState('best-selling');
 
-  const MAX_SLIDER_VALUE = 500; // Adjust if you have items over $500
+  const MAX_SLIDER_VALUE = 500; 
 
-  // --- API FETCH ---
   useEffect(() => {
     fetch('https://api.npoint.io/97e4992f49ffa25befab')
       .then((res) => res.json())
       .then((data) => {
-        // Extract unique categories for the pills
         const uniqueCategories = [...new Set(data.products.map(item => item.category))];
         setAllCategories(uniqueCategories);
 
-        // Filter products based on URL
         const filtered = data.products.filter(p => 
           categoryId.toLowerCase() === 'all' || 
           p.category.toLowerCase() === categoryId.toLowerCase()
@@ -49,31 +57,26 @@ const Collection = () => {
       });
   }, [categoryId]);
 
-  // --- 4. THE MASTER FILTER & SORT ENGINE ---
   const displayedProducts = products
     .filter((product) => {
-      // Stock Filter
       if (!showOutOfStock && product.inStock === false) return false;
-
-      // Price Filter
       if (product.price < minPrice || product.price > maxPrice) return false;
-
-      // Size Filter
       if (selectedSizes.length > 0 && product.sizes) {
         const hasSize = product.sizes.some(size => selectedSizes.includes(size));
         if (!hasSize) return false;
       }
-
-      return true; // Keep if it passes all tests
+      return true; 
     })
     .sort((a, b) => {
-      // Sort Logic
       if (sortBy === 'price-low-high') return a.price - b.price;
       if (sortBy === 'price-high-low') return b.price - a.price;
       return 0; 
     });
 
-  // --- 5. SAFE SLIDER HANDLERS ---
+  const toggleSubFilter = (filter) => {
+    setExpandedFilters(prev => ({ ...prev, [filter]: !prev[filter] }));
+  };
+
   const handleMinPriceChange = (e) => {
     const value = Math.min(Number(e.target.value), maxPrice - 1);
     setMinPrice(value);
@@ -96,7 +99,6 @@ const Collection = () => {
     <div className="collection-page">
       <PromoMarquee />
 
-      {/* DYNAMIC CATEGORY PILLS */}
       <div className="category-pills-container">
         {allCategories.map((cat, index) => (
           <button 
@@ -116,9 +118,7 @@ const Collection = () => {
 
       <div className={`container collection-layout ${isSidebarOpen ? '' : 'sidebar-closed'}`}>
         
-        {/* SIDEBAR */}
         <aside className="collection-sidebar">
-          
           <div className="filter-header" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <div className="filter-title-group">
               <SlidersHorizontal size={18} />
@@ -130,7 +130,6 @@ const Collection = () => {
           {isSidebarOpen && (
             <div className="filter-content-wrapper">
               
-              {/* STOCK TOGGLE */}
               <div className="filter-group toggle-group">
                 <span className="filter-label">Out of stock</span>
                 <div className="custom-toggle">
@@ -145,77 +144,102 @@ const Collection = () => {
                 </div>
               </div>
 
-              {/* PRICE FILTER & SLIDER */}
+              {/* PRICE SUB-FILTER */}
               <div className="filter-group">
-                <div className="filter-label-row">
+                <div 
+                  className="filter-label-row" 
+                  onClick={() => toggleSubFilter('price')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <span className="filter-label">Price</span>
-                  <ChevronDown size={16} />
+                  <ChevronDown 
+                    size={16} 
+                    style={{ 
+                        transform: expandedFilters.price ? 'rotate(180deg)' : 'rotate(0deg)', 
+                        transition: 'transform 0.3s ease' 
+                    }} 
+                  />
                 </div>
                 
-                <div className="price-inputs">
-                  <div className="input-wrapper">
-                    <input 
-                      type="number" 
-                      value={minPrice} 
-                      onChange={(e) => setMinPrice(Number(e.target.value) || 0)} 
-                    />
-                  </div>
-                  <div className="input-wrapper">
-                    <input 
-                      type="number" 
-                      value={maxPrice} 
-                      onChange={(e) => setMaxPrice(Number(e.target.value) || 0)} 
-                    />
-                  </div>
-                </div>
+                {expandedFilters.price && (
+                  <div className="filter-inner-content">
+                    <div className="price-inputs">
+                      <div className="input-wrapper">
+                        <input 
+                          type="number" 
+                          value={minPrice} 
+                          onChange={(e) => setMinPrice(Number(e.target.value) || 0)} 
+                        />
+                      </div>
+                      <div className="input-wrapper">
+                        <input 
+                          type="number" 
+                          value={maxPrice} 
+                          onChange={(e) => setMaxPrice(Number(e.target.value) || 0)} 
+                        />
+                      </div>
+                    </div>
 
-                <div className="range-slider-container">
-                  <div 
-                    className="slider-track-fill" 
-                    style={{ 
-                      left: `${(minPrice / MAX_SLIDER_VALUE) * 100}%`, 
-                      right: `${100 - (maxPrice / MAX_SLIDER_VALUE) * 100}%` 
-                    }}
-                  ></div>
-                  <input 
-                    type="range" min="0" max={MAX_SLIDER_VALUE} 
-                    value={minPrice} onChange={handleMinPriceChange} 
-                    className="range-input min-range" 
-                  />
-                  <input 
-                    type="range" min="0" max={MAX_SLIDER_VALUE} 
-                    value={maxPrice} onChange={handleMaxPriceChange} 
-                    className="range-input max-range" 
-                  />
-                </div>
+                    <div className="range-slider-container">
+                      <div 
+                        className="slider-track-fill" 
+                        style={{ 
+                          left: `${(minPrice / MAX_SLIDER_VALUE) * 100}%`, 
+                          right: `${100 - (maxPrice / MAX_SLIDER_VALUE) * 100}%` 
+                        }}
+                      ></div>
+                      <input 
+                        type="range" min="0" max={MAX_SLIDER_VALUE} 
+                        value={minPrice} onChange={handleMinPriceChange} 
+                        className="range-input min-range" 
+                      />
+                      <input 
+                        type="range" min="0" max={MAX_SLIDER_VALUE} 
+                        value={maxPrice} onChange={handleMaxPriceChange} 
+                        className="range-input max-range" 
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* SIZE FILTER */}
+              {/* SIZE SUB-FILTER */}
               <div className="filter-group">
-                <div className="filter-label-row">
+                <div 
+                  className="filter-label-row" 
+                  onClick={() => toggleSubFilter('size')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <span className="filter-label">Size</span>
-                  <ChevronDown size={16} />
+                  <ChevronDown 
+                    size={16} 
+                    style={{ 
+                        transform: expandedFilters.size ? 'rotate(180deg)' : 'rotate(0deg)', 
+                        transition: 'transform 0.3s ease' 
+                    }} 
+                  />
                 </div>
-                <div className="size-grid">
-                  {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
-                    <button 
-                      key={size} 
-                      className={`size-btn ${selectedSizes.includes(size) ? 'active' : ''}`}
-                      onClick={() => handleSizeToggle(size)}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+                
+                {expandedFilters.size && (
+                  <div className="size-grid">
+                    {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(size => (
+                      <button 
+                        key={size} 
+                        className={`size-btn ${selectedSizes.includes(size) ? 'active' : ''}`}
+                        onClick={() => handleSizeToggle(size)}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
               
             </div>
           )}
         </aside>
 
-        {/* MAIN GRID */}
         <main className="collection-main">
-          
           <div className="collection-controls-right">
             <div className="sort-wrapper">
               <label htmlFor="sort">Sort by:</label>

@@ -2,6 +2,14 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+/**
+ * Renders the user profile dashboard.
+ * Enforces route protection by monitoring the AuthContext and redirecting 
+ * unauthenticated users to the login view. Displays current user details 
+ * and provides a secure logout action.
+ *
+ * @returns {JSX.Element|null} The Profile component, or null during auth redirection.
+ */
 const Profile = () => {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();

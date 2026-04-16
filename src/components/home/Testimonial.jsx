@@ -2,28 +2,22 @@ import React from 'react';
 import { Star } from 'lucide-react';
 
 /**
- * Testimonial Component
- * A split-layout social proof section featuring a customer review 
- * and a direct call-to-action for the featured product.
+ * Renders a social proof section featuring a customer testimonial alongside
+ * the featured product image and a direct call-to-action.
+ *
+ * @returns {JSX.Element} The Testimonial component.
  */
 const Testimonial = () => {
-  // Asset link sourced from the brand's product API
   const productImage = "https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922502/Organic_Cotton_Oxford_Shirt_A_wqejbq.png";
 
   return (
     <section className="testimonial-section">
       <div className="container testimonial-container">
         
-        {/* NARRATIVE COLUMN: 
-          Contains the rating, the quote, and the attribution.
-        */}
         <div className="testimonial-content">
           <span className="testimonial-subtitle">What others are saying</span>
           
           <div className="stars-container">
-            {/* Generates an array of 5 elements to map through 
-              and render the star icons dynamically.
-            */}
             {[...Array(5)].map((_, i) => (
               <Star 
                 key={i} 
@@ -42,9 +36,6 @@ const Testimonial = () => {
           <span className="testimonial-author">— Eddie F.</span>
         </div>
 
-        {/* VISUAL COLUMN: 
-          Features the product image and a contextual shop link.
-        */}
         <div className="testimonial-visual">
           <div className="testimonial-image-wrapper">
             <img 
@@ -58,7 +49,7 @@ const Testimonial = () => {
           </a>
         </div>
 
-      </div> {/* End .testimonial-container */}
+      </div>
     </section>
   );
 };

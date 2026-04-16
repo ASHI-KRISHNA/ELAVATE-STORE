@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 
-
+/**
+ * Renders the Size & Fit Guide page.
+ * Provides dynamic measurement tables for tops and bottoms with a toggle 
+ * to switch between Imperial (inches) and Metric (centimeters) units. 
+ * Includes instructional text on how to capture body measurements accurately.
+ *
+ * @returns {JSX.Element} The SizeGuide page component.
+ */
 const SizeGuide = () => {
-    const [unit, setUnit] = useState('in'); // 'in' or 'cm'
+    const [unit, setUnit] = useState('in');
 
-    // Conversion helper
+    /**
+     * Converts base inch measurements to centimeters if the 'cm' unit is selected.
+     * @param {number} inches - The measurement in inches.
+     * @returns {number} The converted measurement.
+     */
     const convert = (inches) => {
         return unit === 'cm' ? Math.round(inches * 2.54) : inches;
     };
@@ -35,7 +46,6 @@ const SizeGuide = () => {
 
                 <div className="size-tables-container">
 
-                    {/* TOPS TABLE */}
                     <section className="size-section">
                         <h2>Tops & Outerwear</h2>
                         <div className="size-table-wrapper">
@@ -60,7 +70,6 @@ const SizeGuide = () => {
                         </div>
                     </section>
 
-                    {/* BOTTOMS TABLE */}
                     <section className="size-section">
                         <h2>Pants & Shorts</h2>
                         <div className="size-table-wrapper">
@@ -87,7 +96,6 @@ const SizeGuide = () => {
 
                 </div>
 
-                {/* HOW TO MEASURE SECTION */}
                 <div className="how-to-measure">
                     <div className="measure-text">
                         <h3>How to Measure</h3>
@@ -114,11 +122,9 @@ const SizeGuide = () => {
                     </div>
 
                     <div className="measure-visual">
-                        {/* Replace the src URL with the actual URL of the image you generate */}
                         <img
-                            src="src\assets\images\Sizechart.png" alt="size chart"
-
-                            
+                            src="src/assets/images/Sizechart.png" 
+                            alt="Elavate sizing measurement guide"
                         />
                     </div>
                 </div>

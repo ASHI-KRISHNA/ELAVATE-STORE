@@ -3,6 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { ShoppingBag, Star, ChevronRight, ShieldCheck, Truck, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
+/**
+ * Renders the Product Detail Page (PDP).
+ * Fetches specific product data based on the URL parameter, displays an image gallery,
+ * and handles size selection and cart integration with error validation.
+ *
+ * @returns {JSX.Element} The Product page component.
+ */
 const Product = () => {
   const { productId } = useParams();
   const { addToCart } = useCart();
@@ -93,7 +100,7 @@ const Product = () => {
               <div className="pdp-size-section">
                 <div className="size-header">
                   <span className="size-label">Select Size</span>
-                  <span className="size-guide">Size Guide</span>
+                  <a href="/size-guide" className="size-guide">Size Guide</a>
                 </div>
                 
                 <div className={`size-grid pdp-sizes ${sizeError ? 'has-error' : ''}`}>

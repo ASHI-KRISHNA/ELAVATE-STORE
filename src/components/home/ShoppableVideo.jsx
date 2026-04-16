@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 /**
- * ShoppableVideo Component
- * An immersive hero section featuring a background video 
- * and an interactive floating product carousel.
+ * Renders an immersive hero section featuring a looping background video 
+ * overlaid with an interactive, floating shoppable product carousel.
+ *
+ * @returns {JSX.Element} The ShoppableVideo component.
  */
 const ShoppableVideo = () => {
-  // --- Data Configuration ---
   const featuredProducts = [
     {
       id: 1,
@@ -29,11 +29,8 @@ const ShoppableVideo = () => {
     }
   ];
 
-  // --- State Management ---
-  // Tracks the index of the currently displayed product in the overlay
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // --- Navigation Logic ---
   const handleNext = () => {
     setCurrentIndex((prevIndex) => 
       prevIndex === featuredProducts.length - 1 ? 0 : prevIndex + 1
@@ -46,15 +43,11 @@ const ShoppableVideo = () => {
     );
   };
 
-  // Helper variable for the currently active data object
   const activeProduct = featuredProducts[currentIndex];
 
   return (
     <section className="shoppable-video-section">
       
-      {/* BACKGROUND VIDEO LAYER
-          Plays automatically, muted, and loops infinitely. 
-      */}
       <video 
         className="video-bg" 
         autoPlay 
@@ -69,19 +62,15 @@ const ShoppableVideo = () => {
         Your browser does not support the video tag.
       </video>
 
-      {/* INTERACTIVE OVERLAY LAYER */}
       <div className="video-overlay-content">
         
-        {/* Marketing Copy */}
         <div className="video-text-group">
           <span className="video-subtitle">The Original Standard</span>
           <h2 className="video-title">The Fall Collection</h2>
         </div>
 
-        {/* Shoppable Product Card UI */}
         <div className="interactive-card-wrapper">
           
-          {/* Carousel Navigation Buttons */}
           <div className="card-controls">
             <button className="control-btn" onClick={handlePrev} aria-label="Previous product">
               <ChevronLeft size={16} strokeWidth={2} />
@@ -91,13 +80,11 @@ const ShoppableVideo = () => {
             </button>
           </div>
 
-          {/* Dynamic Floating Product Card */}
           <a 
             href={`/collections/products/${activeProduct.id}`} 
             className="floating-product-card"
           >
             <div className="fpc-image-container">
-              {/* The 'key' attribute triggers a re-render/animation when the product changes */}
               <img 
                 key={activeProduct.id} 
                 src={activeProduct.image} 
@@ -111,8 +98,8 @@ const ShoppableVideo = () => {
             </div>
           </a>
 
-        </div> {/* End .interactive-card-wrapper */}
-      </div> {/* End .video-overlay-content */}
+        </div>
+      </div>
     </section>
   );
 };
