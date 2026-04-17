@@ -10,19 +10,19 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const ShoppableVideo = () => {
   const featuredProducts = [
     {
-      id: 1,
+      id: 2,
       name: "Organic Cotton Oxford Shirt",
       price: 69,
       image: "https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922502/Organic_Cotton_Oxford_Shirt_A_wqejbq.png"
     },
     {
-      id: 2,
+      id: 1,
       name: "The Skyline Bomber",
       price: 145,
       image: "https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922772/Skyline_Reversible_Bomber_A_ylg9ep.png"
     },
     {
-      id: 3,
+      id: 5,
       name: "Essential Crewneck",
       price: 45,
       image: "https://res.cloudinary.com/dd0jdnlj4/image/upload/v1775922534/Essential_Crewneck_Tee_A_mpfus9.png"
@@ -81,7 +81,7 @@ const ShoppableVideo = () => {
           </div>
 
           <a 
-            href={`/collections/products/${activeProduct.id}`} 
+            href={`product/${activeProduct.id}`} 
             className="floating-product-card"
           >
             <div className="fpc-image-container">
