@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ShoppingBag, Star, ChevronRight, ShieldCheck, Truck, AlertCircle } from 'lucide-react';
+import { ShoppingBag, Star, ChevronRight, ShieldCheck, Truck, AlertCircle, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 /**
  * Renders the Product Detail Page (PDP).
  * Fetches specific product data based on the URL parameter, displays an image gallery,
- * and handles size selection and cart integration with error validation.
+ * and handles size selection and cart integration with error validation and success states.
  *
  * @returns {JSX.Element} The Product page component.
  */
@@ -19,9 +19,12 @@ const Product = () => {
   
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(false);
+  
+  // New state for the Add to Cart success animation
+  const [isAdded, setIsAdded] = useState(false);
 
   useEffect(() => {
-    fetch('https://api.npoint.io/97e4992f49ffa25befab')
+    fetch('https://api.npoint.io/7384e17282931eb46307')
       .then(res => res.json())
       .then(data => {
         const foundProduct = data.products.find(p => p.id.toString() === productId);
@@ -35,13 +38,23 @@ const Product = () => {
   }, [productId]);
 
   const handleAddToCart = () => {
+    // 1. Validate Size
     if (!selectedSize) {
       setSizeError(true);
       return;
     }
     
+    // 2. Add to Cart
     setSizeError(false);
     addToCart(product, selectedSize);
+
+    // 3. Trigger Success Visual State
+    setIsAdded(true);
+
+    // 4. Reset button after 2 seconds
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2000);
   };
 
   if (loading) return <div className="container loading-state">Loading product details...</div>;
@@ -55,7 +68,7 @@ const Product = () => {
         
         <div className="pdp-breadcrumbs">
           <Link to="/">Home</Link> <ChevronRight size={12} /> 
-          <Link to={`/collections/${product.category.toLowerCase()}`}>Men's {product.category}</Link> 
+          <Link to={`/collections/${product.category?.toLowerCase()}`}>Men's {product.category}</Link> 
           <ChevronRight size={12} /> 
           <span className="current-crumb">{product.name}</span>
         </div>
@@ -67,11 +80,11 @@ const Product = () => {
               {images.slice(0, 3).map((imgUrl, index) => (
                 <div key={index} className={`gallery-item item-${index}`}>
                   <img 
-                    src={imgUrl || 'https://placehold.co/600x800/E8E6E1/1A1A1A?text=No+Image'} 
+                    src={imgUrl || 'https://placehold.co/600x800/EBE8E3/1A1A1A?text=No+Image'} 
                     alt={`${product.name} - view ${index + 1}`} 
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = 'https://placehold.co/600x800/E8E6E1/1A1A1A?text=No+Image';
+                      e.target.src = 'https://placehold.co/600x800/EBE8E3/1A1A1A?text=No+Image';
                     }}
                   />
                 </div>
@@ -93,9 +106,7 @@ const Product = () => {
                 <span>(128 Reviews)</span>
               </div>
 
-              <p className="pdp-description">
-                Expertly tailored for a flawless fit. This piece is crafted from premium, sustainable materials designed to elevate your everyday wardrobe. Engineered for comfort and longevity.
-              </p>
+              
 
               <div className="pdp-size-section">
                 <div className="size-header">
@@ -125,10 +136,28 @@ const Product = () => {
                 )}
               </div>
 
-              <button className="btn-primary add-to-cart-btn" onClick={handleAddToCart}>
-                <ShoppingBag size={20} />
-                ADD TO CART • ${product.price}.00
+              {/* Updated Add to Cart Button with Dynamic State */}
+              <button 
+                className={`btn-primary add-to-cart-btn ${isAdded ? 'added' : ''}`} 
+                onClick={handleAddToCart}
+                disabled={isAdded} // Prevent clicking again while the animation plays
+              >
+                {isAdded ? (
+                  <>
+                    <Check size={20} strokeWidth={2.5} />
+                    ADDED TO CART
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={20} />
+                    ADD TO CART • ${product.price}.00
+                  </>
+                )}
               </button>
+              <p className="pdp-description">
+                {product.description}
+                 Expertly tailored for a flawless fit. This piece is crafted from premium, sustainable materials designed to elevate your everyday wardrobe. Engineered for comfort and longevity.
+              </p>
 
               <div className="pdp-perks">
                 <div className="perk">

@@ -37,7 +37,7 @@ const Collection = () => {
   const MAX_SLIDER_VALUE = 500; 
 
   useEffect(() => {
-    fetch('https://api.npoint.io/97e4992f49ffa25befab')
+    fetch('https://api.npoint.io/7384e17282931eb46307')
       .then((res) => res.json())
       .then((data) => {
         const uniqueCategories = [...new Set(data.products.map(item => item.category))];

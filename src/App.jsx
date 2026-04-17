@@ -16,7 +16,7 @@ import Profile from './pages/Profile';
 import SizeGuide from "./pages/SizeGuide";
 import Contact from "./pages/Contact";
 import Shipping from './pages/Shipping'; 
-
+import OrderConfirmation from './pages/OrderConfirmation'
 /**
  * Renders a fallback UI for undefined routes or features in development.
  * * @param {Object} props - Component properties.
@@ -59,6 +59,7 @@ function App() {
                 <Route path="/size-guide" element={<SizeGuide />} />
                 <Route path="/shipping" element={<Shipping />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
               </Routes>
             </main>

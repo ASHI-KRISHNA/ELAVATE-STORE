@@ -42,7 +42,7 @@ const Navbar = () => {
   }, [isSearchOpen]);
 
   useEffect(() => {
-    fetch('https://api.npoint.io/97e4992f49ffa25befab')
+    fetch('https://api.npoint.io/7384e17282931eb46307')
       .then(res => res.json())
       .then(data => setAllProducts(data.products))
       .catch(err => console.error("Search fetch error:", err));

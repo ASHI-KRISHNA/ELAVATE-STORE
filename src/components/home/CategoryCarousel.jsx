@@ -19,7 +19,7 @@ const CategoryCarousel = ({ title, categoryFilter }) => {
   useEffect(() => {
     setLoading(true);
 
-    fetch('https://api.npoint.io/97e4992f49ffa25befab')
+    fetch('https://api.npoint.io/7384e17282931eb46307')
       .then((res) => res.json())
       .then((data) => {
         const filteredProducts = data.products.filter(
