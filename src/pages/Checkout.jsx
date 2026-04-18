@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Lock, CreditCard, Info, Tag, CheckCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cartItems, clearCart } = useCart(); 
+  const { currentUser } = useAuth();
   
   const [couponInput, setCouponInput] = useState('');
   const [isDiscountApplied, setIsDiscountApplied] = useState(false);
@@ -47,10 +49,26 @@ const Checkout = () => {
     paymentMethod: "Visa ending in 4242"
   });
 
+  const saveOrderToAccount = (orderData) => {
+    const existingOrders = JSON.parse(localStorage.getItem('elavate_orders') || '[]');
+    
+    // Tie the order to the account email, falling back to the checkout input email if checking out as guest
+    const updatedOrder = {
+      ...orderData,
+      userEmail: currentUser?.email || formData.email,
+      status: 'Processing' // Adding a default status for the profile UI
+    };
+    
+    existingOrders.push(updatedOrder);
+    localStorage.setItem('elavate_orders', JSON.stringify(existingOrders));
+  };
+
   const handlePayment = (e) => {
     e.preventDefault();
     setIsProcessing(true);
     const orderData = createOrderObject();
+    
+    saveOrderToAccount(orderData);
     
     setTimeout(() => {
       if (clearCart) clearCart();
@@ -63,6 +81,8 @@ const Checkout = () => {
     setIsProcessing(true);
     const orderData = createOrderObject();
     orderData.paymentMethod = provider;
+    
+    saveOrderToAccount(orderData);
     
     setTimeout(() => {
       if (clearCart) clearCart();
