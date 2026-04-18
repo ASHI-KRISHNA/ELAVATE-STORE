@@ -3,14 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Lock, CreditCard, Info, Tag, CheckCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
-/**
- * Renders the Checkout & Payment Page.
- * Uses strict inline math to guarantee accurate subtotal, discount, and grand totals.
- * Handles both standard credit card payments (modal) and express checkout (redirect).
- */
 const Checkout = () => {
   const navigate = useNavigate();
-  // Pulling cartItems and clearCart from context
   const { cartItems, clearCart } = useCart(); 
   
   const [couponInput, setCouponInput] = useState('');
@@ -18,14 +12,17 @@ const Checkout = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Redirect to cart if empty (UNLESS the success modal is currently open)
+  // UPDATED REDIRECT LOGIC
   useEffect(() => {
-    if (!showSuccessModal && (!cartItems || cartItems.length === 0)) {
+    // Only redirect if: 
+    // 1. We aren't currently processing a payment
+    // 2. We haven't finished a payment (modal isn't shown)
+    // 3. The cart is empty
+    if (!isProcessing && !showSuccessModal && (!cartItems || cartItems.length === 0)) {
       navigate('/cart');
     }
-  }, [cartItems, navigate, showSuccessModal]);
+  }, [cartItems, navigate, showSuccessModal, isProcessing]);
 
-  // --- BULLETPROOF CALCULATION LOGIC ---
   const subtotal = (cartItems || []).reduce((acc, item) => {
     return acc + (Number(item.price) * (Number(item.quantity) || 1));
   }, 0);
@@ -43,38 +40,32 @@ const Checkout = () => {
   const subtotalAfterDiscount = subtotal - discountAmount;
   const shipping = subtotal === 0 ? 0 : (subtotalAfterDiscount >= 99 ? 0 : 15);
   const finalTotal = subtotalAfterDiscount + shipping;
-  // -------------------------------------
 
-  // 1. STANDARD PAYMENT HANDLER (Shows Modal)
   const handlePayment = (e) => {
     e.preventDefault();
     setIsProcessing(true);
     
     setTimeout(() => {
-      setIsProcessing(false);
-      setShowSuccessModal(true); 
-      
+      // Clear cart first while isProcessing is still true to prevent redirect
       if (clearCart && typeof clearCart === 'function') {
         clearCart();
       }
+      setIsProcessing(false);
+      setShowSuccessModal(true); 
     }, 2000);
   };
 
-  // 2. EXPRESS PAYMENT HANDLER (Redirects to Order Confirmation Page)
   const handleExpressPayment = (provider) => {
-    // We can use the provider string ('Shop Pay' or 'PayPal') if we want to pass it along later
     setIsProcessing(true);
     
     setTimeout(() => {
-      setIsProcessing(false);
-      
       if (clearCart && typeof clearCart === 'function') {
         clearCart();
       }
-      
-      // Redirect to the dedicated order confirmation page
+      // Navigate to order confirmation
       navigate('/order-confirmation');
-    }, 1500); // Slightly faster simulated processing for express checkout
+      // isProcessing remains true until the component unmounts during navigation
+    }, 1500); 
   };
 
   const handleReturnHome = () => {
@@ -84,8 +75,6 @@ const Checkout = () => {
 
   return (
     <div className="checkout-layout">
-      
-      {/* LEFT COLUMN - Checkout Form */}
       <div className="checkout-main">
         <div className="checkout-header">
           <Link to="/" className="checkout-logo">ELAVATE</Link>
@@ -122,7 +111,6 @@ const Checkout = () => {
         </div>
 
         <form className="checkout-form" onSubmit={handlePayment}>
-          
           <div className="form-section">
             <div className="section-header-row">
               <h2>Contact</h2>
@@ -199,7 +187,6 @@ const Checkout = () => {
               `PAY $${finalTotal.toFixed(2)} CAD`
             )}
           </button>
-
         </form>
 
         <div className="checkout-footer">
@@ -210,10 +197,8 @@ const Checkout = () => {
         </div>
       </div>
 
-      {/* RIGHT COLUMN - Order Summary Sidebar */}
       <div className="checkout-sidebar">
         <div className="sidebar-content">
-          
           <div className="summary-items">
             {cartItems && cartItems.length > 0 ? (
               cartItems.map((item, index) => (
@@ -284,25 +269,16 @@ const Checkout = () => {
               <strong>${finalTotal.toFixed(2)}</strong>
             </div>
           </div>
-
-          {isDiscountApplied && (
-            <div className="total-savings" style={{ marginTop: '15px', fontSize: '0.85rem', color: '#666', textAlign: 'right' }}>
-              <Tag size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '5px' }} /> 
-              TOTAL SAVINGS: ${discountAmount.toFixed(2)}
-            </div>
-          )}
-
         </div>
       </div>
 
-      {/* --- PAYMENT SUCCESS MODAL --- */}
       {showSuccessModal && (
         <div className="auth-modal-overlay">
           <div className="auth-modal-box">
             <CheckCircle size={48} color="#2A3F2D" style={{ margin: '0 auto 20px', display: 'block' }} />
             <h2>Order Confirmed</h2>
             <p>
-              Thank you for your purchase! Your payment of <strong>${finalTotal.toFixed(2)} CAD</strong> has been processed successfully. A receipt has been sent to your email.
+              Thank you for your purchase! Your payment has been processed successfully.
             </p>
             <div className="auth-modal-actions">
               <button 
@@ -316,7 +292,6 @@ const Checkout = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

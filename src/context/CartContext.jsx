@@ -33,6 +33,9 @@ export const CartProvider = ({ children }) => {
    * Adds a product to the cart or increments its quantity if it already exists 
    * with the exact same size. Automatically opens the cart UI.
    */
+  const clearCart = () => {
+    setCartItems([]);
+  };
   const addToCart = (product, size) => {
     setCartItems(prev => {
       const existingItem = prev.find(item => item.id === product.id && item.selectedSize === size);
@@ -77,12 +80,13 @@ export const CartProvider = ({ children }) => {
   const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
-  return (
+return (
     <CartContext.Provider value={{ 
       cartItems, 
       addToCart, 
       removeFromCart, 
       updateQuantity,
+      clearCart, 
       isCartOpen, 
       toggleCart, 
       cartTotal, 
