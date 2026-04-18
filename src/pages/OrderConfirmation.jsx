@@ -51,7 +51,8 @@ const OrderConfirmation = () => {
                 <p>
                   {order.shippingAddress.firstName} {order.shippingAddress.lastName}<br />
                   {order.shippingAddress.address}<br />
-                  {order.shippingAddress.city}, {order.shippingAddress.province} {order.shippingAddress.postalCode}
+                  {order.shippingAddress.city}, {order.shippingAddress.province} {order.shippingAddress.postalCode}<br />
+                  {order.shippingAddress.country}
                 </p>
               </div>
 

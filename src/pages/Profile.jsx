@@ -8,15 +8,27 @@ const Profile = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('details');
   const [orders, setOrders] = useState([]);
+  
+  // Address states
+  const [addresses, setAddresses] = useState([]);
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
+  const [newAddress, setNewAddress] = useState({
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: ''
+  });
 
   useEffect(() => {
-    // Fetch orders tied to the current user's email
+    // Fetch orders and addresses tied to the current user's email
     if (currentUser?.email) {
       const allOrders = JSON.parse(localStorage.getItem('elavate_orders') || '[]');
       const userOrders = allOrders.filter(order => order.userEmail === currentUser.email);
-
-      // Sort orders by newest first (assuming ID or Date creation)
       setOrders(userOrders.reverse());
+
+      const savedAddresses = JSON.parse(localStorage.getItem(`elavate_addresses_${currentUser.email}`) || '[]');
+      setAddresses(savedAddresses);
     }
   }, [currentUser]);
 
@@ -27,6 +39,25 @@ const Profile = () => {
     } catch (error) {
       console.error("Failed to log out", error);
     }
+  };
+
+  const handleAddressChange = (e) => {
+    const { name, value } = e.target;
+    setNewAddress(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSaveAddress = (e) => {
+    e.preventDefault();
+    const updatedAddresses = [...addresses, newAddress];
+    setAddresses(updatedAddresses);
+    
+    if (currentUser?.email) {
+      localStorage.setItem(`elavate_addresses_${currentUser.email}`, JSON.stringify(updatedAddresses));
+    }
+    
+    // Reset form and close
+    setIsAddingAddress(false);
+    setNewAddress({ street: '', city: '', state: '', zip: '', country: '' });
   };
 
   return (
@@ -68,9 +99,6 @@ const Profile = () => {
                   <label style={labelStyle}>Email Address</label>
                   <p style={valueStyle}>{currentUser?.email || 'N/A'}</p>
                 </div>
-                <button className="btn-secondary" style={{ width: 'fit-content', padding: '12px 24px', fontSize: '0.85rem', marginTop: '10px' }}>
-                  EDIT PROFILE
-                </button>
               </div>
             </div>
           )}
@@ -85,7 +113,7 @@ const Profile = () => {
                     <div
                       key={index}
                       style={orderCardStyle}
-                      onClick={() => navigate(`/order/${order.orderNumber}`)} // <-- Added Navigation
+                      onClick={() => navigate(`/order/${order.orderNumber}`)}
                     >
                       <div className="order-info">
                         <span style={{ fontWeight: '600', display: 'block', fontSize: '0.95rem' }}>{order.orderNumber}</span>
@@ -114,15 +142,59 @@ const Profile = () => {
           {activeTab === 'addresses' && (
             <div className="tab-pane">
               <h2 style={{ fontSize: '1.2rem', marginBottom: '25px', fontWeight: '500' }}>Saved Addresses</h2>
-              <div style={orderCardStyle}>
+              
+              {isAddingAddress ? (
+                <form onSubmit={handleSaveAddress} style={{ display: 'grid', gap: '16px', maxWidth: '500px' }}>
+                  <input required type="text" name="street" placeholder="Street Address" value={newAddress.street} onChange={handleAddressChange} style={inputStyle} />
+                  <input required type="text" name="city" placeholder="City" value={newAddress.city} onChange={handleAddressChange} style={inputStyle} />
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <input required type="text" name="state" placeholder="State/Province" value={newAddress.state} onChange={handleAddressChange} style={inputStyle} />
+                    <input required type="text" name="zip" placeholder="ZIP / Postal Code" value={newAddress.zip} onChange={handleAddressChange} style={inputStyle} />
+                  </div>
+                  <input required type="text" name="country" placeholder="Country" value={newAddress.country} onChange={handleAddressChange} style={inputStyle} />
+                  
+                  <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                    <button type="submit" style={{ padding: '10px 20px', background: '#000', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500' }}>
+                      Save Address
+                    </button>
+                    <button type="button" onClick={() => setIsAddingAddress(false)} style={{ padding: '10px 20px', background: '#f5f5f5', color: '#333', border: '1px solid #ddd', borderRadius: '4px', cursor: 'pointer', fontWeight: '500' }}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
                 <div>
-                  <p style={{ fontWeight: '600' }}>Default Shipping Address</p>
-                  <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '4px' }}>
-                    No address saved. Add one to speed up checkout.
-                  </p>
+                  {addresses.length > 0 ? (
+                    <div style={{ display: 'grid', gap: '16px' }}>
+                      {addresses.map((addr, idx) => (
+                        <div key={idx} style={{ padding: '20px', border: '1px solid #eee', borderRadius: '8px', background: '#fafafa' }}>
+                          <p style={{ fontWeight: '600', marginBottom: '8px' }}>Address {idx + 1}</p>
+                          <p style={{ color: '#555', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                            {addr.street}<br />
+                            {addr.city}, {addr.state} {addr.zip}<br />
+                            {addr.country}
+                          </p>
+                        </div>
+                      ))}
+                      <button onClick={() => setIsAddingAddress(true)} style={{ marginTop: '10px', padding: '10px 20px', width: 'fit-content', background: '#fff', border: '1px solid #000', borderRadius: '4px', cursor: 'pointer', fontWeight: '600' }}>
+                        ADD ANOTHER ADDRESS
+                      </button>
+                    </div>
+                  ) : (
+                    <div style={orderCardStyle}>
+                      <div>
+                        <p style={{ fontWeight: '600' }}>Default Shipping Address</p>
+                        <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '4px' }}>
+                          No address saved. Add one to speed up checkout.
+                        </p>
+                      </div>
+                      <button onClick={() => setIsAddingAddress(true)} style={{ padding: '8px 16px', background: '#fff', border: '1px solid #000', borderRadius: '4px', cursor: 'pointer', fontWeight: '600' }}>
+                        ADD NEW
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <button className="btn-secondary" style={{ padding: '8px 16px' }}>ADD NEW</button>
-              </div>
+              )}
             </div>
           )}
         </main>
@@ -139,5 +211,6 @@ const labelStyle = { display: 'block', fontSize: '0.75rem', color: '#999', textT
 const valueStyle = { fontSize: '1rem', fontWeight: '400', color: '#111' };
 const orderCardStyle = { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '24px', border: '1px solid #f0f0f0', borderRadius: '8px', cursor: 'pointer', transition: 'border-color 0.2s ease' };
 const statusBadgeStyle = (status) => ({ fontSize: '0.7rem', padding: '4px 12px', borderRadius: '20px', background: status === 'Delivered' ? '#eefdf3' : '#fff9f0', color: status === 'Delivered' ? '#28a745' : '#f0ad4e', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' });
+const inputStyle = { padding: '12px', borderRadius: '4px', border: '1px solid #ddd', width: '100%', fontSize: '0.95rem', outline: 'none' };
 
 export default Profile;
