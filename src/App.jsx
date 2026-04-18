@@ -17,6 +17,7 @@ import SizeGuide from "./pages/SizeGuide";
 import Contact from "./pages/Contact";
 import Shipping from './pages/Shipping'; 
 import OrderConfirmation from './pages/OrderConfirmation'
+import OrderDetails from './pages/OrderDetails';
 /**
  * Renders a fallback UI for undefined routes or features in development.
  * * @param {Object} props - Component properties.
@@ -61,6 +62,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/order-confirmation" element={<OrderConfirmation />} />
                 <Route path="*" element={<PlaceholderPage title="Page Not Found" />} />
+                <Route path="/order/:orderId" element={<OrderDetails />} />
               </Routes>
             </main>
             <Footer />

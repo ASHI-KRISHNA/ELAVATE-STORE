@@ -14,7 +14,7 @@ const Profile = () => {
     if (currentUser?.email) {
       const allOrders = JSON.parse(localStorage.getItem('elavate_orders') || '[]');
       const userOrders = allOrders.filter(order => order.userEmail === currentUser.email);
-      
+
       // Sort orders by newest first (assuming ID or Date creation)
       setOrders(userOrders.reverse());
     }
@@ -32,7 +32,7 @@ const Profile = () => {
   return (
     <div className="profile-page-container" style={{ maxWidth: '1200px', margin: '120px auto', padding: '0 20px' }}>
       <div className="profile-layout" style={{ display: 'grid', gridTemplateColumns: '250px 1fr', gap: '40px' }}>
-        
+
         {/* SIDEBAR NAVIGATION */}
         <aside className="profile-sidebar">
           <h1 style={{ fontSize: '1.5rem', marginBottom: '30px', fontWeight: '600', letterSpacing: '-0.5px' }}>Account</h1>
@@ -54,7 +54,7 @@ const Profile = () => {
 
         {/* MAIN CONTENT AREA */}
         <main className="profile-content" style={{ background: '#fff', padding: '40px', borderRadius: '12px', border: '1px solid #eee' }}>
-          
+
           {/* TAB: PERSONAL DETAILS */}
           {activeTab === 'details' && (
             <div className="tab-pane">
@@ -82,7 +82,11 @@ const Profile = () => {
               {orders.length > 0 ? (
                 <div className="orders-list" style={{ display: 'grid', gap: '16px' }}>
                   {orders.map((order, index) => (
-                    <div key={index} style={orderCardStyle}>
+                    <div
+                      key={index}
+                      style={orderCardStyle}
+                      onClick={() => navigate(`/order/${order.orderNumber}`)} // <-- Added Navigation
+                    >
                       <div className="order-info">
                         <span style={{ fontWeight: '600', display: 'block', fontSize: '0.95rem' }}>{order.orderNumber}</span>
                         <span style={{ fontSize: '0.8rem', color: '#888' }}>{order.date}</span>
