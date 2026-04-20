@@ -19,9 +19,9 @@ const Footer = () => {
             Minimalist menswear designed in Canada. <br />
             Sustainable essentials for the modern man.
           </p>
-          <div className="social-links" style={{ fontSize: '0.7rem', fontWeight: '800', letterSpacing: '0.1em' }}>
+          <div className="social-links footer-social-links">
             <a href="https://instagram.com" target="_blank" rel="noreferrer">INSTAGRAM</a>
-            <span style={{ opacity: 0.2 }}>|</span>
+            <span className="social-divider">|</span>
             <a href="https://twitter.com" target="_blank" rel="noreferrer">TWITTER</a>
           </div>
         </div>
@@ -46,7 +46,7 @@ const Footer = () => {
 
         <div className="footer-column">
           <h3>Join the Club</h3>
-          <p style={{ color: '#999', fontSize: '0.85rem', marginBottom: '15px' }}>
+          <p className="footer-newsletter-text">
             Subscribe for early access and 10% off your first order.
           </p>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
@@ -59,7 +59,7 @@ const Footer = () => {
       
       <div className="footer-bottom">
         <p>&copy; {currentYear} ELAVATE. All Rights Reserved.</p>
-        <p style={{ marginTop: '10px', opacity: 0.3, fontSize: '0.65rem', letterSpacing: '0.2em' }}>
+        <p className="footer-designed-in">
             DESIGNED IN CANADA
         </p>
       </div>

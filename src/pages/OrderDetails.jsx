@@ -14,10 +14,7 @@ const OrderDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // Fetch all orders from localStorage
     const allOrders = JSON.parse(localStorage.getItem('elavate_orders') || '[]');
-    
-    // Find the specific order that matches the URL parameter
     const foundOrder = allOrders.find(o => o.orderNumber === orderId);
     
     if (foundOrder) {
@@ -29,7 +26,7 @@ const OrderDetails = () => {
 
   if (loading) {
     return (
-      <div style={{ padding: '150px 20px', textAlign: 'center', fontFamily: 'sans-serif' }}>
+      <div className="order-details-loading">
         <p>Loading order details...</p>
       </div>
     );
@@ -37,15 +34,10 @@ const OrderDetails = () => {
 
   if (!order) {
     return (
-      <div style={{ padding: '150px 20px', textAlign: 'center', fontFamily: 'sans-serif' }}>
+      <div className="order-details-error">
         <h2>Order Not Found</h2>
-        <p style={{ color: '#666', marginTop: '10px', marginBottom: '20px' }}>
-          We couldn't find the order you're looking for.
-        </p>
-        <button 
-          onClick={() => navigate('/profile')} 
-          style={{ padding: '10px 20px', background: '#000', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '600' }}
-        >
+        <p>We couldn't find the order you're looking for.</p>
+        <button onClick={() => navigate('/profile')} className="btn-solid mt-sm">
           Return to Profile
         </button>
       </div>
@@ -53,51 +45,38 @@ const OrderDetails = () => {
   }
 
   return (
-    <div style={{ maxWidth: '1000px', margin: '120px auto', padding: '0 20px', fontFamily: 'sans-serif' }}>
+    <div className="order-details-container">
       
-      <div style={{ marginBottom: '30px' }}>
-        <Link to="/profile" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#555', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '500' }}>
+      <div className="order-details-header">
+        <Link to="/profile" className="back-link">
           <ChevronLeft size={16} /> Back to Profile
         </Link>
-        <h1 style={{ fontSize: '2rem', marginTop: '15px', fontWeight: '600' }}>
-          Order {order.orderNumber}
-        </h1>
-        <p style={{ color: '#666', marginTop: '5px' }}>Placed on {order.date}</p>
-        <span style={{ 
-            display: 'inline-block', 
-            marginTop: '12px', 
-            fontSize: '0.75rem', 
-            padding: '4px 12px', 
-            borderRadius: '20px', 
-            background: order.status === 'Delivered' ? '#eefdf3' : '#fff9f0', 
-            color: order.status === 'Delivered' ? '#28a745' : '#f0ad4e', 
-            fontWeight: '600', 
-            textTransform: 'uppercase', 
-            letterSpacing: '0.5px' 
-        }}>
+        <h1 className="order-details-title">Order {order.orderNumber}</h1>
+        <p className="order-details-date">Placed on {order.date}</p>
+        <span className={`status-badge ${(order.status || 'processing').toLowerCase()}`}>
           {order.status || 'Processing'}
         </span>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '40px', alignItems: 'start' }}>
+      <div className="order-details-layout">
         
         {/* LEFT COLUMN: ORDER INFO */}
-        <div style={{ display: 'grid', gap: '20px' }}>
+        <div className="order-info-stack">
           
-          <div style={{ padding: '24px', background: '#fff', border: '1px solid #eee', borderRadius: '8px' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', marginBottom: '15px', fontWeight: '600' }}>
+          <div className="info-card">
+            <h3 className="info-card-title">
               <Package size={20} strokeWidth={1.5} /> Shipping Method
             </h3>
-            <p style={{ color: '#555' }}>
+            <p className="info-card-text">
               {order.totals.shipping === 0 ? 'Free Standard Shipping' : 'Standard Shipping'}
             </p>
           </div>
 
-          <div style={{ padding: '24px', background: '#fff', border: '1px solid #eee', borderRadius: '8px' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', marginBottom: '15px', fontWeight: '600' }}>
+          <div className="info-card">
+            <h3 className="info-card-title">
               <MapPin size={20} strokeWidth={1.5} /> Shipping Address
             </h3>
-            <p style={{ color: '#555', lineHeight: '1.6' }}>
+            <p className="info-card-text">
               {order.shippingAddress.firstName} {order.shippingAddress.lastName}<br />
               {order.shippingAddress.address}<br />
               {order.shippingAddress.city}, {order.shippingAddress.province} {order.shippingAddress.postalCode}<br />
@@ -105,72 +84,69 @@ const OrderDetails = () => {
             </p>
           </div>
 
-          <div style={{ padding: '24px', background: '#fff', border: '1px solid #eee', borderRadius: '8px' }}>
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', marginBottom: '15px', fontWeight: '600' }}>
+          <div className="info-card">
+            <h3 className="info-card-title">
               <CreditCard size={20} strokeWidth={1.5} /> Payment Details
             </h3>
-            <p style={{ color: '#555' }}>{order.paymentMethod}</p>
+            <p className="info-card-text">{order.paymentMethod}</p>
           </div>
 
         </div>
 
         {/* RIGHT COLUMN: ORDER SUMMARY */}
-        <div style={{ padding: '24px', background: '#fafafa', border: '1px solid #eee', borderRadius: '8px' }}>
-          <h2 style={{ fontSize: '1.2rem', marginBottom: '20px', fontWeight: '600' }}>Order Summary</h2>
+        <div className="order-summary-card">
+          <h2 className="summary-title">Order Summary</h2>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+          <div className="summary-items">
             {order.items.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', gap: '16px' }}>
-                <div style={{ width: '64px', height: '64px', background: '#eee', borderRadius: '6px', overflow: 'hidden', position: 'relative' }}>
+              <div key={idx} className="summary-item">
+                <div className="summary-item-img-wrapper">
                   <img 
                     src={Array.isArray(item.image) ? item.image[0] : item.image} 
                     alt={item.name} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
-                  <span style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#555', color: '#fff', fontSize: '0.7rem', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', border: '2px solid #fafafa' }}>
-                    {item.quantity}
-                  </span>
+                  <span className="summary-item-qty">{item.quantity}</span>
                 </div>
-                <div style={{ flex: 1 }}>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: '600', marginBottom: '4px' }}>{item.name}</h4>
-                  <p style={{ fontSize: '0.8rem', color: '#666' }}>Size: {item.selectedSize}</p>
+                <div className="summary-item-info">
+                  <h4>{item.name}</h4>
+                  <p>Size: {item.selectedSize}</p>
                 </div>
-                <div style={{ fontWeight: '600', fontSize: '0.95rem' }}>
+                <div className="summary-item-price">
                   ${(item.price * item.quantity).toFixed(2)}
                 </div>
               </div>
             ))}
           </div>
 
-          <hr style={{ border: 'none', borderTop: '1px solid #ddd', marginBottom: '16px' }} />
+          <hr className="summary-divider" />
 
-          <div style={{ display: 'grid', gap: '12px', fontSize: '0.95rem', color: '#555', marginBottom: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className="summary-totals">
+            <div className="total-row">
               <span>Subtotal</span>
               <span>${order.totals.subtotal.toFixed(2)}</span>
             </div>
             {order.totals.discount > 0 && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#d93025' }}>
+              <div className="total-row discount-row">
                 <span>Discount</span>
                 <span>-${order.totals.discount.toFixed(2)}</span>
               </div>
             )}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="total-row">
               <span>Shipping</span>
               <span>{order.totals.shipping === 0 ? 'FREE' : `$${order.totals.shipping.toFixed(2)}`}</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="total-row">
               <span>Taxes</span>
               <span>${order.totals.taxes.toFixed(2)}</span>
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderTop: '1px solid #ddd', marginBottom: '16px' }} />
+          <hr className="summary-divider" />
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.2rem', fontWeight: '700' }}>
+          <div className="grand-total-row">
             <span>Total</span>
             <div>
-              <span style={{ fontSize: '0.8rem', color: '#666', marginRight: '6px', fontWeight: '500' }}>CAD</span>
+              <span className="currency-label">CAD</span>
               ${order.totals.total.toFixed(2)}
             </div>
           </div>

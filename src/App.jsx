@@ -18,6 +18,8 @@ import Contact from "./pages/Contact";
 import Shipping from './pages/Shipping'; 
 import OrderConfirmation from './pages/OrderConfirmation'
 import OrderDetails from './pages/OrderDetails';
+import ScrollToTop from './components/layout/ScrollToTop';
+
 /**
  * Renders a fallback UI for undefined routes or features in development.
  * * @param {Object} props - Component properties.
@@ -25,9 +27,9 @@ import OrderDetails from './pages/OrderDetails';
  * @returns {JSX.Element} The PlaceholderPage component.
  */
 const PlaceholderPage = ({ title }) => (
-  <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
-    <h1 style={{ textTransform: 'uppercase', letterSpacing: '0.2em' }}>{title}</h1>
-    <p>This section is currently under development.</p>
+  <div className="container placeholder-page">
+    <h1 className="placeholder-title">{title}</h1>
+    <p className="placeholder-subtitle">This section is currently under development.</p>
   </div>
 );
 
@@ -44,6 +46,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
+          <ScrollToTop />
           <div className="App">
             <Navbar />
             <main className="main-content">

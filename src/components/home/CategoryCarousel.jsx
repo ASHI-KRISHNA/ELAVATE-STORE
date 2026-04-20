@@ -5,11 +5,6 @@ import ProductCard from '../plp/ProductCard';
 /**
  * Renders a horizontal, scrollable carousel of products filtered by category.
  * Fetches product data asynchronously and provides programmatic scroll controls.
- *
- * @param {Object} props - Component properties.
- * @param {string} props.title - The display title for the carousel header.
- * @param {string} props.categoryFilter - The exact category string used to filter the API payload.
- * @returns {JSX.Element} The CategoryCarousel component.
  */
 const CategoryCarousel = ({ title, categoryFilter }) => {
   const [products, setProducts] = useState([]);
@@ -34,10 +29,6 @@ const CategoryCarousel = ({ title, categoryFilter }) => {
       });
   }, [categoryFilter]);
 
-  /**
-   * Programmatically scrolls the carousel container.
-   * @param {'left'|'right'} direction - The direction to scroll.
-   */
   const scroll = (direction) => {
     if (carouselRef.current) {
       const scrollAmount = 320;
@@ -49,7 +40,7 @@ const CategoryCarousel = ({ title, categoryFilter }) => {
   };
 
   return (
-    <section className="grid-section" style={{ paddingTop: '0px' }}>
+    <section className="grid-section category-carousel-section">
       <div className="container">
         
         <div className="carousel-header">
