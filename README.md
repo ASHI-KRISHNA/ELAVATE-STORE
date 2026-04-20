@@ -27,7 +27,7 @@ Styling: Modular CSS organized by component and page
 
 Icons: Lucide-React
 
-Backend & Auth: Firebase (v9+ Modular SDK)
+Auth: Firebase (v9+ Modular SDK)
 
 Routing: React Router v6
 
